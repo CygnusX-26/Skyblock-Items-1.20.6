@@ -1,0 +1,7 @@
+name: Skyblock-Items
+version: '${project.version}'
+main: me.neilhommes.skyblockitems.SkyblockItems
+api-version: 1.20
+authors: [ NeilHommes ]
+description: Recreating some items from Hypixel Skyblock and possibly some new ideas
+website: www.neilhommes.xyz
