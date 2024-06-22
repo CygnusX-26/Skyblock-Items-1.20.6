@@ -5,5 +5,7 @@ public enum itemNBTData {
     SPIRIT_SCEPTRE,
     AOTE,
     AOTV,
-    VOID_CRYSTAL
+    VOID_CRYSTAL,
+    TERMINATOR,
+    TARANTULA_SILK
 }
