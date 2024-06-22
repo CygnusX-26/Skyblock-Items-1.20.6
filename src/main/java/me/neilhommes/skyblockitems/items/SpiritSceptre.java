@@ -68,6 +68,16 @@ public class SpiritSceptre implements Listener {
                         Vector direction = player.getLocation().getDirection().normalize();
                         direction.multiply(1.4);
                         bat.setVelocity(direction);
+                        for (LivingEntity entity : bat.getLocation().getNearbyLivingEntities(2)) {
+                            System.out.println(entity.getName());
+                            if (entity instanceof Player && ((Player) entity).equals(player) ) {
+                                continue;
+                            } else if (entity instanceof Bat)  {
+                                continue;
+                            }
+                            ticks += 19;
+                            break;
+                        }
                         ticks++;
                     } else {
                         Location endLocation = bat.getLocation();
@@ -112,7 +122,9 @@ public class SpiritSceptre implements Listener {
     public static ItemStack generateSpiritSceptre() {
         ItemStack ss = new ItemStack(Material.ALLIUM);
         ItemMeta meta = ss.getItemMeta();
+
         if (meta != null) {
+            meta.setMaxStackSize(1);
             meta.displayName(Component.text().content("Spirit Sceptre").color(TextColor.color(0xFCFF33)).build());
             List<Component> lore = new ArrayList<Component>();
             lore.add(Component.empty()
