@@ -70,7 +70,7 @@ public class SpiritSceptre implements Listener {
                         bat.setVelocity(direction);
                         for (LivingEntity entity : bat.getLocation().getNearbyLivingEntities(2)) {
                             System.out.println(entity.getName());
-                            if (entity instanceof Player && ((Player) entity).equals(player) ) {
+                            if (entity instanceof Player && entity.equals(player) ) {
                                 continue;
                             } else if (entity instanceof Bat)  {
                                 continue;
