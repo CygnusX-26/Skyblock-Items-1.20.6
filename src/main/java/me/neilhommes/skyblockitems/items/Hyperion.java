@@ -107,7 +107,7 @@ public class Hyperion implements Listener {
         ItemMeta meta = hyperion.getItemMeta();
         if (meta != null) {
             meta.displayName(Component.text().content("Hyperion").color(TextColor.color(0xff33fC)).build());
-            List<Component> lore = new ArrayList<Component>();
+            List<Component> lore = new ArrayList<>();
             lore.add(Component.empty()
                     .append(Component.text().content("RIGHT CLICK")
                     .color(TextColor.color(0xFCFF33))

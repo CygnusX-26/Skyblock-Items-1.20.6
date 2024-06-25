@@ -121,7 +121,7 @@ public class AspectOfTheEnd implements Listener {
         ItemMeta meta = aote.getItemMeta();
         if (meta != null) {
             meta.displayName(Component.text().content("Aspect Of The End").color(TextColor.color(0x913FF)).build());
-            List<Component> lore = new ArrayList<Component>();
+            List<Component> lore = new ArrayList<>();
             lore.add(Component.empty()
                     .append(Component.text().content("RIGHT CLICK")
                             .color(TextColor.color(0xFCFF33))
@@ -152,7 +152,7 @@ public class AspectOfTheEnd implements Listener {
         ItemMeta meta = aotv.getItemMeta();
         if (meta != null) {
             meta.displayName(Component.text().content("Aspect Of The Void").color(TextColor.color(0x913FF)).build());
-            List<Component> lore = new ArrayList<Component>();
+            List<Component> lore = new ArrayList<>();
             lore.add(Component.empty()
                     .append(Component.text().content("RIGHT CLICK")
                             .color(TextColor.color(0xFCFF33))

@@ -120,7 +120,7 @@ public class Terminator implements Listener {
         if (meta != null) {
             meta.setMaxStackSize(1);
             meta.displayName(Component.text().content("Terminator").color(TextColor.color(0xFF00E0)).build());
-            List<Component> lore = new ArrayList<Component>();
+            List<Component> lore = new ArrayList<>();
             lore.add(Component.empty()
                     .append(Component.text("Short bow!", TextColor.color(0xFFEF00))
                     .append(Component.text(" Instantly shoots",TextColor.color(0xffffff)))));
