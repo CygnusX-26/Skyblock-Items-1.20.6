@@ -32,7 +32,7 @@ public class VoidCrystal {
         if (meta != null) {
             meta.setEnchantmentGlintOverride(true);
             meta.displayName(Component.text().content("Void Crystal").color(TextColor.color(0x3364FF)).build());
-            List<Component> lore = new ArrayList<Component>();
+            List<Component> lore = new ArrayList<>();
             lore.add(Component.empty()
                     .append(Component.text().content("Netherite infused dragons breath")
                             .color(TextColor.color(0xffffff))));

@@ -32,7 +32,7 @@ public class TarantulaSilk {
         if (meta != null) {
             meta.setEnchantmentGlintOverride(true);
             meta.displayName(Component.text().content("Tarantula Silk").color(TextColor.color(0x3364FF)).build());
-            List<Component> lore = new ArrayList<Component>();
+            List<Component> lore = new ArrayList<>();
             lore.add(Component.empty()
                     .append(Component.text("Netherite infused string", TextColor.color(0xffffff))));
             meta.lore(lore);
