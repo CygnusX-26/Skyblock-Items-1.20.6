@@ -21,7 +21,6 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Terminator implements Listener {
@@ -30,9 +29,8 @@ public class Terminator implements Listener {
         ItemStack bow = event.getItem();
         Player player = event.getPlayer();
         PlayerInventory inventory = player.getInventory();
-        Location location = player.getLocation();
-        location.setY(location.getY() + 1.5);
-        Vector direction = location.getDirection();
+        Location eyeLocation = player.getEyeLocation();
+        Vector direction = eyeLocation.getDirection();
         if (bow == null || !bow.hasItemMeta()) {
             return;
         }
@@ -50,32 +48,32 @@ public class Terminator implements Listener {
         }
         if (meta.getPersistentDataContainer().has(new NamespacedKey(SkyblockItems.getInstance(), "neil_terminator"), PersistentDataType.STRING)) {
             if (event.getAction().isLeftClick()) {
-                Location destination;
-                float yaw = location.getYaw();
-                float pitch = location.getPitch();
-                double calcX = Math.sin(Math.toRadians(yaw));
-                double calcY = Math.sin(-1 * Math.toRadians(pitch));
-                double calcZ = Math.cos(Math.toRadians(yaw));  //TODO: improve this logic -> swap out with vectors
                 ParticleBuilder pb;
-                for (float i = 0; i < 60; i+=0.3f) {
-                    destination = new Location(player.getWorld(),
-                            location.x() - i * calcX,
-                            location.y() + i * calcY,
-                            location.z() + i * calcZ,
-                            yaw,
-                            pitch);
-                    pb = new ParticleBuilder(Particle.DRIPPING_LAVA);
+                Location particleLocation;
+                for (float i = 0; i < 40; i+=0.3f) {
+                    particleLocation = eyeLocation.clone().add(direction.clone().multiply(i));
+                    pb = new ParticleBuilder(Particle.DRIPPING_DRIPSTONE_LAVA);
                     pb.color(null, 30)
-                            .location(destination)
+                            .location(particleLocation)
                             .count(1)
                             .spawn();
-                    Collection<LivingEntity> nearby = destination.getNearbyLivingEntities(0.2);
-
-                    for (LivingEntity entity : nearby) {
-                        if (entity instanceof Player && entity.equals(player)) {
-                            continue;
+                    if (!particleLocation.getBlock().getType().equals(Material.AIR)) {
+                        break;
+                    }
+                    List<LivingEntity> nearby = (List<LivingEntity>) particleLocation.getNearbyLivingEntities(0.1);
+                    if (nearby.isEmpty()) {
+                        continue;
+                    }
+                    LivingEntity entity = nearby.get(0);
+                    if (entity.equals(player)) {
+                        if (nearby.size() > 1) {
+                            nearby.get(1).damage(5);
+                            break;
                         }
+                    } else {
+                        entity.setNoDamageTicks(0);
                         entity.damage(5);
+                        entity.setNoDamageTicks(10);
                         break;
                     }
                 }
@@ -96,9 +94,9 @@ public class Terminator implements Listener {
                 hasArrows = true;
             }
             if (hasArrows) {
-                player.getWorld().spawnArrow(location, direction, 3.5f, 4.0f);
-                player.getWorld().spawnArrow(location, direction, 3.5f, 4.0f);
-                player.getWorld().spawnArrow(location, direction, 3.5f, 4.0f);
+                player.getWorld().spawnArrow(eyeLocation, direction, 3.5f, 4.0f);
+                player.getWorld().spawnArrow(eyeLocation, direction, 3.5f, 4.0f);
+                player.getWorld().spawnArrow(eyeLocation, direction, 3.5f, 4.0f);
             }
         }
     }

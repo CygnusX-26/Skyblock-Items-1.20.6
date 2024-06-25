@@ -21,6 +21,7 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,47 +42,28 @@ public class AspectOfTheEnd implements Listener {
         if (item.getItemMeta().getPersistentDataContainer()
                 .has(new NamespacedKey(SkyblockItems.getInstance(), "neil_aote"), PersistentDataType.STRING)) {
             Player player = event.getPlayer();
-            Location location = player.getLocation();
-            World world = player.getWorld();
-            float yaw = location.getYaw();
-            float pitch = location.getPitch();
-            float tpd = teleportDistance;
-            Location destination;
-            double calcX = Math.sin(Math.toRadians(yaw));
-            double calcY = Math.sin(-1 * Math.toRadians(pitch));
-            double calcZ = Math.cos(Math.toRadians(yaw));
-            destination = new Location(player.getWorld(),
-                    location.x() - tpd * calcX,
-                    location.y() + tpd * calcY,
-                    location.z() + tpd * calcZ,
-                    yaw,
-                    pitch);
-            for (float i = tpd; i > 0.5; i-=0.5) {
-                destination.setX(location.x() - tpd * calcX);
-                destination.setY(location.y() + tpd * calcY);
-                destination.setZ(location.z() + tpd * calcZ);
-                if (!destination.getBlock().isSolid()) {
+            Location eyeLocation = player.getEyeLocation();
+            Vector direction = eyeLocation.getDirection();
+            Location destination = eyeLocation.clone().add(direction.clone().multiply(0));
+            Location temp;
+            for (float i = 0.2f; i < teleportDistance; i+= 0.2f) {
+                temp = eyeLocation.clone().add(direction.clone().multiply(i));
+                if (!temp.getBlock().isCollidable()) {
+                    destination = eyeLocation.clone().add(direction.clone().multiply(i));
+                } else {
                     break;
                 }
-                tpd-- ;
+
             }
-            Location warpDest;
-            if (!destination.getBlock().isSolid()) {
-                player.teleport(destination);
-                warpDest = new Location(world, destination.x(), destination.y() + 1, destination.z());
-                ParticleBuilder pb = new ParticleBuilder(Particle.PORTAL);
-                pb.color(null, 20)
-                        .location(warpDest)
-                        .count(3)
-                        .spawn();
-            } else {
-                warpDest = new Location(world, location.x(), location.y() + 1, location.z());
-                ParticleBuilder pb = new ParticleBuilder(Particle.PORTAL);
-                pb.color(null, 20)
-                        .location(warpDest)
-                        .count(3)
-                        .spawn();
-            }
+            destination.setY(destination.getY());
+            player.teleport(destination);
+            Location particleLocation = destination.clone();
+            particleLocation.setY(particleLocation.getY() + 1);
+            ParticleBuilder pb = new ParticleBuilder(Particle.PORTAL);
+            pb.color(null, 20)
+                    .location(particleLocation)
+                    .count(3)
+                    .spawn();
             Sound sound = Sound.sound(
                     Key.key("minecraft", "entity.enderman.teleport"),
                     Sound.Source.AMBIENT,
@@ -92,47 +74,28 @@ public class AspectOfTheEnd implements Listener {
         } else if (item.getItemMeta().getPersistentDataContainer()
                 .has(new NamespacedKey(SkyblockItems.getInstance(), "neil_aotv"), PersistentDataType.STRING)){
             Player player = event.getPlayer();
-            Location location = player.getLocation();
-            World world = player.getWorld();
-            float yaw = location.getYaw();
-            float pitch = location.getPitch();
-            float tpd = teleportDistance+2;
-            Location destination;
-            double calcX = Math.sin(Math.toRadians(yaw));
-            double calcY = Math.sin(-1 * Math.toRadians(pitch));
-            double calcZ = Math.cos(Math.toRadians(yaw));
-            destination = new Location(player.getWorld(),
-                    location.x() - tpd * calcX,
-                    location.y() + tpd * calcY,
-                    location.z() + tpd * calcZ,
-                    yaw,
-                    pitch);
-            for (float i = tpd; i > 0.5; i-=0.5) {
-                destination.setX(location.x() - tpd * calcX);
-                destination.setY(location.y() + tpd * calcY);
-                destination.setZ(location.z() + tpd * calcZ);
-                if (!destination.getBlock().isSolid()) {
+            Location eyeLocation = player.getEyeLocation();
+            Vector direction = eyeLocation.getDirection();
+            Location destination = eyeLocation.clone().add(direction.clone().multiply(0));
+            Location temp;
+            for (float i = 0.2f; i < teleportDistance+2; i+= 0.2f) {
+                temp = eyeLocation.clone().add(direction.clone().multiply(i));
+                if (!temp.getBlock().isCollidable()) {
+                    destination = eyeLocation.clone().add(direction.clone().multiply(i));
+                } else {
                     break;
                 }
-                tpd-- ;
+
             }
-            Location warpDest;
-            if (!destination.getBlock().isSolid()) {
-                player.teleport(destination);
-                warpDest = new Location(world, destination.x(), destination.y() + 1, destination.z());
-                ParticleBuilder pb = new ParticleBuilder(Particle.PORTAL);
-                pb.color(null, 20)
-                        .location(warpDest)
-                        .count(3)
-                        .spawn();
-            } else {
-                warpDest = new Location(world, location.x(), location.y() + 1, location.z());
-                ParticleBuilder pb = new ParticleBuilder(Particle.PORTAL);
-                pb.color(null, 20)
-                        .location(warpDest)
-                        .count(3)
-                        .spawn();
-            }
+            destination.setY(destination.getY());
+            player.teleport(destination);
+            Location particleLocation = destination.clone();
+            particleLocation.setY(particleLocation.getY() + 1);
+            ParticleBuilder pb = new ParticleBuilder(Particle.PORTAL);
+            pb.color(null, 20)
+                    .location(particleLocation)
+                    .count(3)
+                    .spawn();
             Sound sound = Sound.sound(
                     Key.key("minecraft", "entity.enderman.teleport"),
                     Sound.Source.AMBIENT,

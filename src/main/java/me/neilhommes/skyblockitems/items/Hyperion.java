@@ -11,10 +11,8 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.NamespacedKey;
-import org.bukkit.World;
-import org.bukkit.entity.Entity;
+import org.bukkit.Particle;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,6 +26,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,61 +47,29 @@ public class Hyperion implements Listener {
         if (item.getItemMeta().getPersistentDataContainer()
                 .has(new NamespacedKey(SkyblockItems.getInstance(), "neil_hyperion"), PersistentDataType.STRING)) {
             Player player = event.getPlayer();
-            Location location = player.getLocation();
-            World world = player.getWorld();
-            float yaw = location.getYaw();
-            float pitch = location.getPitch();
-            float tpd = teleportDistance;
-            Location destination;
-            double calcX = Math.sin(Math.toRadians(yaw));
-            double calcY = Math.sin(-1 * Math.toRadians(pitch));
-            double calcZ = Math.cos(Math.toRadians(yaw));
-            destination = new Location(player.getWorld(),
-                    location.x() - tpd * calcX,
-                    location.y() + tpd * calcY,
-                    location.z() + tpd * calcZ,
-                    yaw,
-                    pitch);
-            for (float i = tpd; i > 0.5; i-=0.5) {
-                destination.setX(location.x() - tpd * calcX);
-                destination.setY(location.y() + tpd * calcY);
-                destination.setZ(location.z() + tpd * calcZ);
-                if (!destination.getBlock().isSolid()) {
+            Location eyeLocation = player.getEyeLocation();
+            Vector direction = eyeLocation.getDirection();
+            Location destination = eyeLocation.clone().add(direction.clone().multiply(0));
+            Location temp;
+            for (float i = 0.2f; i < teleportDistance; i+= 0.2f) {
+                temp = eyeLocation.clone().add(direction.clone().multiply(i));
+                if (!temp.getBlock().isCollidable()) {
+                    destination = eyeLocation.clone().add(direction.clone().multiply(i));
+                } else {
                     break;
                 }
-                tpd-- ;
-            }
-            Location explosionDest;
-            if (!destination.getBlock().isSolid()) {
-                player.teleport(destination);
-                explosionDest = new Location(world, destination.x(), destination.y() + 1, destination.z());
-                ParticleBuilder pb = new ParticleBuilder(Particle.EXPLOSION);
-                pb.color(null, 100)
-                        .location(explosionDest)
-                        .count(3)
-                        .spawn();
-            } else {
-                explosionDest = new Location(world, location.x(), location.y() + 1, location.z());
-                ParticleBuilder pb = new ParticleBuilder(Particle.EXPLOSION);
-                pb.color(null, 100)
-                        .location(explosionDest)
-                        .count(3)
-                        .spawn();
-            }
-            for (Entity entity : world.getNearbyEntities(explosionDest, 7, 7, 7)) {
-                if (entity instanceof LivingEntity) {
-                    if (entity instanceof Player && ((Player) entity).equals(player)) {
-                        continue;
-                    }
-                    LivingEntity livingEntity = (LivingEntity) entity;
-                    livingEntity.damage(10);
-                }
-            }
 
-            player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 100, 2));
-//          player.setFoodLevel(player.getFoodLevel() - 1); possible nerf
-//            if (player.getHealth() - 1 > 0)
-//                player.setHealth(player.getHealth() - 1);
+            }
+            destination.setY(destination.getY());
+            player.teleport(destination);
+            Location particleLocation = destination.clone();
+            player.teleport(destination);
+            particleLocation.setY(particleLocation.getY() + 1);
+            ParticleBuilder pb = new ParticleBuilder(Particle.EXPLOSION);
+            pb.color(null, 20)
+                    .location(particleLocation)
+                    .count(3)
+                    .spawn();
             Sound sound = Sound.sound(
                     Key.key("minecraft", "entity.generic.explode"),
                     Sound.Source.AMBIENT,
@@ -110,6 +77,15 @@ public class Hyperion implements Listener {
                     1.0f
             );
             player.playSound(sound);
+            for (LivingEntity entity : particleLocation.getNearbyLivingEntities(7)) {
+                if (entity instanceof Player && entity.equals(player)) {
+                    continue;
+                }
+                entity.setNoDamageTicks(0);
+                entity.damage(10);
+                entity.setNoDamageTicks(10);
+            }
+            player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 100, 2));
         }
     }
 
