@@ -57,6 +57,7 @@
                         <configuration>
                             <classifier>1.20.6</classifier>
                             <outputDirectory>server/plugins</outputDirectory>
+                            <outputDirectory>.</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
