@@ -120,7 +120,7 @@ public class AspectOfTheEnd implements Listener {
         ItemStack aote = new ItemStack(Material.DIAMOND_SWORD);
         ItemMeta meta = aote.getItemMeta();
         if (meta != null) {
-            meta.displayName(Component.text().content("Aspect Of The End").color(TextColor.color(0x913FF)).build());
+            meta.displayName(Component.text().content("Aspect Of The End").color(TextColor.color(0x3364FF)).build());
             List<Component> lore = new ArrayList<>();
             lore.add(Component.empty()
                     .append(Component.text().content("RIGHT CLICK")
@@ -151,7 +151,7 @@ public class AspectOfTheEnd implements Listener {
         ItemStack aotv = new ItemStack(Material.DIAMOND_SHOVEL);
         ItemMeta meta = aotv.getItemMeta();
         if (meta != null) {
-            meta.displayName(Component.text().content("Aspect Of The Void").color(TextColor.color(0x913FF)).build());
+            meta.displayName(Component.text().content("Aspect Of The Void").color(TextColor.color(0x3364FF)).build());
             List<Component> lore = new ArrayList<>();
             lore.add(Component.empty()
                     .append(Component.text().content("RIGHT CLICK")

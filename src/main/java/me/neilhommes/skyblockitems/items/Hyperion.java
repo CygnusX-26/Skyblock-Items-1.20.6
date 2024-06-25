@@ -2,6 +2,7 @@ package me.neilhommes.skyblockitems.items;
 
 import com.destroystokyo.paper.ParticleBuilder;
 import me.neilhommes.skyblockitems.SkyblockItems;
+import me.neilhommes.skyblockitems.items.partials.WitherCatalyst;
 import me.neilhommes.skyblockitems.nbts.itemNBTData;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -94,7 +95,7 @@ public class Hyperion implements Listener {
 
         ShapedRecipe recipe = new ShapedRecipe(key, generateHyperion());
         recipe.shape("DAE", "CAC", " B ");
-        recipe.setIngredient('A', new ItemStack(Material.NETHER_STAR));
+        recipe.setIngredient('A', WitherCatalyst.generateWitherCatalyst());
         recipe.setIngredient('B', AspectOfTheEnd.generateAOTV());
         recipe.setIngredient('C', new ItemStack(Material.END_CRYSTAL));
         recipe.setIngredient('D', new ItemStack(Material.ELYTRA));

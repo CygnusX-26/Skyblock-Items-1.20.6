@@ -7,5 +7,6 @@ public enum itemNBTData {
     AOTV,
     VOID_CRYSTAL,
     TERMINATOR,
-    TARANTULA_SILK
+    TARANTULA_SILK,
+    WITHER_CATALYST
 }
